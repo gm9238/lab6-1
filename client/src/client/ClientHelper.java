@@ -62,9 +62,10 @@ public class ClientHelper {
 
     private boolean processRequest() {
         Request request = null;;
-        Response response = null;;
+        Response response; // = null;;
         do {
             try {
+                request = new Request("bye");
                 streamWriter.writeObject(request);
                 response = (Response) streamReader.readObject();
                 System.out.print(response);
