@@ -7,6 +7,7 @@ import common.objects.Response;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.Scanner;
 
 public class ClientHelper {
     private String serverHost;
@@ -63,9 +64,10 @@ public class ClientHelper {
     private boolean processRequest() {
         Request request = null;;
         Response response; // = null;;
+        Scanner scanner = new Scanner(System.in);
         do {
             try {
-                request = new Request("bye");
+                request = new Request(scanner.nextLine());
                 streamWriter.writeObject(request);
                 response = (Response) streamReader.readObject();
                 System.out.print(response);
@@ -77,7 +79,7 @@ public class ClientHelper {
                 System.out.print("Send/receive error");
             }
 
-        } while (request.getCommandString().equals("bye"));
-        return true;
+        } while (!request.getCommandString().equals("bye"));
+        return false;
     }
 }

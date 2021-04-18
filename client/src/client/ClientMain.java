@@ -18,8 +18,9 @@ public class ClientMain {
     }
 
     public static void main(String[] args) {
-        if (!chechAbility(args)) return;
-        ClientHelper clientHelper = new ClientHelper(args[0], Integer.parseInt(args[1]), CONNECTION_TIMEOUT, MAX_CONNECTION_ATTEMPTS);
+//        if (!chechAbility(args)) return;
+//        ClientHelper clientHelper = new ClientHelper(args[0], Integer.parseInt(args[1]), CONNECTION_TIMEOUT, MAX_CONNECTION_ATTEMPTS);
+        ClientHelper clientHelper = new ClientHelper("localhost", 38912, CONNECTION_TIMEOUT, MAX_CONNECTION_ATTEMPTS);
         clientHelper.start();
     }
 
