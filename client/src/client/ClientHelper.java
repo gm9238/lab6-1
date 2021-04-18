@@ -16,8 +16,8 @@ public class ClientHelper {
     private int connectionAttempt;
 
     private SocketChannel socketChannel;
-    private ObjectOutputStream serverWriter;
-    private ObjectInputStream serverReader;
+    private ObjectOutputStream streamWriter;
+    private ObjectInputStream streamReader;
 
     public ClientHelper(String serverHost, int serverPort, int connectionTimeout, int maxConnectionAttempts ) {
         this.serverHost = serverHost;
@@ -52,8 +52,8 @@ public class ClientHelper {
     private void setConnection() throws ConnectionErrorException{
         try {
             socketChannel = SocketChannel.open(new InetSocketAddress(serverHost, serverPort));
-            serverWriter = new ObjectOutputStream(socketChannel.socket().getOutputStream());
-            serverReader = new ObjectInputStream(socketChannel.socket().getInputStream());
+            streamWriter = new ObjectOutputStream(socketChannel.socket().getOutputStream());
+            streamReader = new ObjectInputStream(socketChannel.socket().getInputStream());
         } catch (IOException exception) {
             System.out.print("Connection error");
             throw new ConnectionErrorException();
@@ -64,9 +64,19 @@ public class ClientHelper {
         Request request = null;;
         Response response = null;;
         do {
+            try {
+                streamWriter.writeObject(request);
+                response = (Response) streamReader.readObject();
+                System.out.print(response);
+            } catch (InvalidClassException | NotSerializableException exception) {
+                System.out.print("InvalidClassException");
+            } catch (ClassNotFoundException exception) {
+                System.out.print("ClassNotFoundException");
+            } catch (IOException exception) {
+                System.out.print("Send/receive error");
+            }
 
         } while (request.getCommandString().equals("bye"));
-        serverWriter.writeObject(request);
         return true;
     }
 }
